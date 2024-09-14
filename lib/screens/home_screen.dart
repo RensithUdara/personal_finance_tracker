@@ -57,7 +57,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Personal Finance Tracker'),
-        backgroundColor: Colors.teal,
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -79,104 +78,111 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         child: Column(
           children: [
-            Expanded(child: _buildSummaryCard()),
+            _buildSummaryCard(),  // Changed from Expanded to a direct call
             _buildQuickActions(context),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          try {
-            final double? result = await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => SetBudgetScreen(),
-              ),
-            );
-            if (result != null) {
-              _setBudget(result);
-            }
-          } catch (e) {
-            print("Error setting budget: $e");
-          }
-        },
-        child: Icon(Icons.attach_money),
-        backgroundColor: Colors.teal,
       ),
     );
   }
 
   Widget _buildSummaryCard() {
-    return Card(
-      margin: EdgeInsets.all(16.0),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0),
-      ),
-      elevation: 5,
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.lightBlueAccent.withOpacity(0.1), Colors.white],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+    return Padding(
+      padding: EdgeInsets.all(16.0),
+      child: Card(
+        shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
         ),
-        child: Padding(
-          padding: EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Total Balance',
-                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w500),
-              ),
-              SizedBox(height: 8.0),
-              Text(
-                'Rs.${totalBalance.toStringAsFixed(1)}',
-                style: TextStyle(
-                  fontSize: 32.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.teal,
+        elevation: 5,
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.lightBlueAccent.withOpacity(0.1), Colors.white],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          child: Padding(
+            padding: EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Total Balance',
+                      style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w500),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.attach_money),
+                      color: Colors.teal,
+                      onPressed: () async {
+                        try {
+                          final double? result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SetBudgetScreen(),
+                            ),
+                          );
+                          if (result != null) {
+                            _setBudget(result);
+                          }
+                        } catch (e) {
+                          print("Error setting budget: $e");
+                        }
+                      },
+                    ),
+                  ],
                 ),
-              ),
-              Divider(thickness: 1.5),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Income', style: TextStyle(fontSize: 16.0)),
-                      SizedBox(height: 4.0),
-                      Text(
-                        'Rs.${totalIncome.toStringAsFixed(1)}',
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          color: Colors.green,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
+                SizedBox(height: 8.0),
+                Text(
+                  'Rs.${totalBalance.toStringAsFixed(1)}',
+                  style: TextStyle(
+                    fontSize: 32.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.teal,
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Expenses', style: TextStyle(fontSize: 16.0)),
-                      SizedBox(height: 4.0),
-                      Text(
-                        'Rs.${totalExpenses.toStringAsFixed(1)}',
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          color: Colors.red,
-                          fontWeight: FontWeight.w500,
+                ),
+                Divider(thickness: 1.5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Income', style: TextStyle(fontSize: 16.0)),
+                        SizedBox(height: 4.0),
+                        Text(
+                          'Rs.${totalIncome.toStringAsFixed(1)}',
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            color: Colors.green,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Expenses', style: TextStyle(fontSize: 16.0)),
+                        SizedBox(height: 4.0),
+                        Text(
+                          'Rs.${totalExpenses.toStringAsFixed(1)}',
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            color: Colors.red,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
